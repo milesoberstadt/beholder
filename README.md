@@ -10,7 +10,7 @@ me easily notify me if stuff crashed, so I wrote my own.
 
 ### Docker Setup (recommended)
 
-0. Install Docker on your machine
+0. Install Docker and Docker Compose on your machine
 1. Clone this repositiory on a server on your network. Could be a Pi, could be something else
 
 `git clone https://github.com/milesoberstadt/beholder.git`
@@ -19,12 +19,12 @@ me easily notify me if stuff crashed, so I wrote my own.
 
 ```
 cd beholder
-docker build -t beholder .
+docker-compose build
 ```
 
 3. Test run the container
 
-`docker run -it --rm --name beholder beholder`
+`docker-compose up`
 
 
 ### Setup without Docker (good luck with that)
