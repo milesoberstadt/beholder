@@ -6,3 +6,6 @@ services:
       context: .
       args:
         APP_NAME: beholder
+    volumes:
+      - .:/home/app/beholder
+    command: python beholder.py
