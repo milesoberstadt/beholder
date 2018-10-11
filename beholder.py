@@ -1,10 +1,14 @@
 # Lots of inspiration from this (I suck at threading in Python) https://stackoverflow.com/a/30358778
 
 import socket
+import json
+import sys
+from json import JSONDecodeError
 from functools import partial
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
 from errno import ECONNREFUSED
+from pprint import pprint
 
 NUM_CORES = 4
 
@@ -52,4 +56,15 @@ def is_port_opened(server=None,port=None, **kwargs):
         print(e)
         raise
 
-is_port_opened("192.168.42.2", 9091)
+
+config = []
+with open("config.json") as f:
+    try:
+        config = json.load(f)
+    except JSONDecodeError as e:
+        print("Error parsing your config file, you could try validating it here: https://codebeautify.org/jsonvalidator")
+        sys.exit(e)
+pprint(config)
+
+for host in config["hosts"]:
+    is_port_opened(host["ip"], host["port"])
