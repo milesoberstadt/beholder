@@ -45,11 +45,11 @@ def is_port_opened(server=None,port=None, **kwargs):
             else:
                 print('port_scanner.is_port_opened() port not opened: (' + port  +')')
                 return False
-        except Exception, e:
+        except Exception as e:
             raise
 
-    except Exception,e:
-        print e
+    except Exception as e:
+        print(e)
         raise
 
 is_port_opened("192.168.42.2", 9091)
