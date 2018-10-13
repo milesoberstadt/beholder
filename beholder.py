@@ -3,6 +3,7 @@
 import socket
 import json
 import sys
+import requests
 from json import JSONDecodeError
 from functools import partial
 from multiprocessing import Pool
@@ -56,6 +57,15 @@ def is_port_opened(server=None,port=None, **kwargs):
         print(e)
         raise
 
+def notify_ifttt(offline_hosts, config):
+    message = "\n".join(offline_hosts)
+    message = "\n"+message
+    options = config["notifier"]["ifttt"]
+    url = "https://maker.ifttt.com/trigger/{}/with/key/{}".format(options["event_name"], options["api_key"])
+    headers = {'Content-Type': 'application/json'}
+    print(url)
+    r = requests.post(url, data = {'value1': message})
+    print(r.text)
 
 config = []
 with open("config.json") as f:
@@ -66,5 +76,11 @@ with open("config.json") as f:
         sys.exit(e)
 pprint(config)
 
+offline_hosts = []
 for host in config["hosts"]:
-    is_port_opened(host["ip"], host["port"])
+    online = is_port_opened(host["ip"], host["port"])
+    if (online == False):
+        offline_hosts.append(host["ip"])
+
+if (len(offline_hosts)):
+    notify_ifttt(offline_hosts, config)
